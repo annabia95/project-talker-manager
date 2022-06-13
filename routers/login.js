@@ -4,6 +4,10 @@ const router = express.Router();
 
 const crypto = require('crypto');
 
+const middlewares = require('../middlewares');
+
+router.use(middlewares.loginValidation);
+
 router.post('/', (req, res) => {
   try {
     const { email, password } = req.body;
