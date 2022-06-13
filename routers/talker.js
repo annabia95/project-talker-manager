@@ -14,4 +14,18 @@ router.get('/', async (_req, res) => {
   res.status(200).json(data);
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  const data = await readFile('./talker.json');
+
+  const dataID = data.find((elem) => elem.id === +id);
+
+  if (!dataID) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+
+  res.status(200).json(dataID);
+});
+
 module.exports = router;
