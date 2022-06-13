@@ -14,7 +14,7 @@ router.get('/', async (_req, res) => {
   res.status(200).json(data);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   
   const data = await readFile('./talker.json');
@@ -26,6 +26,7 @@ router.get('/:id', async (req, res) => {
   }
 
   res.status(200).json(dataID);
+  next();
 });
 
 module.exports = router;
