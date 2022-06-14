@@ -43,7 +43,7 @@ router.post('/',
   return res.status(201).json(newUser);
 });
 
-/* router.get('/search', middlewares.auth, async (req, res) => {
+router.get('/search', middlewares.auth, async (req, res) => {
   const { q } = req.query;
 
   const data = await readFile('./talker.json');
@@ -59,7 +59,7 @@ router.post('/',
   }
 
   res.status(200).json(userSearch);
-}); */
+});
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
