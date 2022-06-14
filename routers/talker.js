@@ -76,19 +76,41 @@ router.get('/:id', async (req, res, next) => {
   next();
 });
 
-router.delete('/:id', async (req, res) => {
+router.put('/:id',
+  middlewares.auth,
+  middlewares.nameValidation,
+  middlewares.ageValidation,  
+  middlewares.talkValidation,
+  middlewares.watchedAtValidation,
+  middlewares.rateValidation,
+  async (req, res) => {
+  const data = await readFile('./talker.json'); 
+  const { id } = req.params;
+  const user = req.body;
+
+  const updateUser = {
+    id,
+    ...user,
+  };
+  const newUsersList = data.filter((talker) => talker.id !== Number(id));
+
+  newUsersList.push(updateUser);
+
+  await writeFile('./talker.json', JSON.stringify(newUsersList));
+
+  return res.status(200).json(updateUser);
+});
+
+router.delete('/:id', middlewares.auth, async (req, res) => {
   const { id } = req.params;
   
   const data = await readFile('./talker.json');
 
-  const userIndex = data.findIndex((u) => u.id === +id);
+  const updateUsers = data.filter((talker) => talker.id !== Number(id));
 
-  if (userIndex === -1) {
-    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-  }
-  data.splice(userIndex, 1);
+  await writeFile('./talker.json', JSON.stringify(updateUsers));
 
-  res.status(204).end();
+  return res.status(204).end();
 });
 
 module.exports = router;
