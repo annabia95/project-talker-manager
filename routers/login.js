@@ -8,20 +8,9 @@ const middlewares = require('../middlewares');
 
 router.use(middlewares.loginValidation);
 
-router.post('/', (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if ([email, password].includes(undefined)) {
-      return res.status(401).json({ message: 'missing fields' });
-    }
-
+router.post('/', (_req, res) => {
     const token = crypto.randomBytes(8).toString('hex');
-
     return res.status(200).json({ token });
-  } catch (error) {
-    return res.status(500).end();
-  }
 });
 
 module.exports = router;
