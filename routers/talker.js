@@ -86,13 +86,14 @@ router.put('/:id',
   async (req, res) => {
   const data = await readFile('./talker.json'); 
   const { id } = req.params;
-  const { name, age, talk: { watchedAt, rate } } = req.body;
+  const user = req.body;
   const updateUser = {
-    id: Number(id), name, age, talk: { watchedAt, rate },
+    id: Number(id),
+    ...user,
   };
-  const newUsersList = data.map((user) => {
-    if (updateUser.id === user.id) return updateUser;
-    return user;
+  const newUsersList = data.map((elem) => {
+    if (updateUser.id === elem.id) return updateUser;
+    return elem;
   });
 
   await writeFile('./talker.json', JSON.stringify(newUsersList));
