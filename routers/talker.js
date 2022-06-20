@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 const express = require('express');
 
 const router = express.Router();
@@ -10,7 +9,8 @@ const databaseUsers = require('../talker.json');
 const middlewares = require('../middlewares');
 
 router.get('/', async (_req, res) => {
-  const data = await readFile('./talker.json');
+  const file = await readFile();
+  const data = JSON.parse(file);
 
   if (data.length === 0) {
     return res.status(200).json([]);
@@ -34,7 +34,8 @@ router.post('/',
     ...user,
   };
 
-  const data = await readFile('./talker.json');
+  const file = await readFile();
+  const data = JSON.parse(file);
 
   data.push(newUser);
 
@@ -46,7 +47,8 @@ router.post('/',
 router.get('/search', middlewares.auth, async (req, res) => {
   const { q } = req.query;
 
-  const data = await readFile('./talker.json');
+  const file = await readFile();
+  const data = JSON.parse(file);
 
   const userSearch = data.filter((u) => 
     u.name.toLowerCase().includes(q.toLowerCase()));
@@ -64,7 +66,8 @@ router.get('/search', middlewares.auth, async (req, res) => {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   
-  const data = await readFile('./talker.json');
+  const file = await readFile();
+  const data = JSON.parse(file);
 
   const dataID = data.find((elem) => elem.id === +id);
 
@@ -84,7 +87,8 @@ router.put('/:id',
   middlewares.watchedAtValidation,
   middlewares.rateValidation,
   async (req, res) => {
-  const data = await readFile('./talker.json'); 
+  const file = await readFile();
+  const data = JSON.parse(file);
   const { id } = req.params;
   const user = req.body;
   const updateUser = {
@@ -104,7 +108,8 @@ router.put('/:id',
 router.delete('/:id', middlewares.auth, async (req, res) => {
   const { id } = req.params;
   
-  const data = await readFile('./talker.json');
+  const file = await readFile();
+  const data = JSON.parse(file);
 
   const updateUsers = data.filter((talker) => talker.id !== Number(id));
 
